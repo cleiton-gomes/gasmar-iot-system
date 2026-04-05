@@ -1,0 +1,15 @@
+# Ignorar pastas de compilação pesadas (O QUE ESTÁ DANDO ERRO)
+**/build/
+**/sdkconfig
+**/managed_components/
+**/.pio/
+
+# Ignorar dependências da API
+**/node_modules/
+**/dist/
+
+# Ignorar arquivos de sistema e logs
+.DS_Store
+Thumbs.db
+*.log
+*.tmp

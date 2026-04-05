@@ -1,0 +1,100 @@
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>GásMar | Dashboard de Segurança</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+    <!-- Biblioteca jsPDF -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+    <style>
+        :root {
+            --bg-color: #0f172a;
+            --card-bg: #1e293b;
+            --accent: #38bdf8;
+            --danger: #ef4444;
+            --success: #10b981;
+            --text: #f8fafc;
+        }
+        body { font-family: 'Segoe UI', sans-serif; background: var(--bg-color); color: var(--text); margin: 0; padding: 20px; overflow: hidden; }
+        .container { display: grid; grid-template-columns: 1fr 2fr; gap: 20px; height: 90vh; }
+        .sidebar { display: flex; flex-direction: column; gap: 20px; }
+        .card { background: var(--card-bg); padding: 25px; border-radius: 15px; border: 1px solid #334155; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); }
+        .status-badge { padding: 5px 15px; border-radius: 20px; font-size: 14px; font-weight: bold; }
+        .status-ok { background: #10b98122; color: var(--success); border: 1px solid var(--success); }
+        .status-alerta { background: #ef444422; color: var(--danger); border: 1px solid var(--danger); animation: pulse 1.5s infinite; }
+        .gas-value { font-size: 64px; font-weight: 800; color: var(--accent); margin: 10px 0; transition: color 0.3s ease; }
+        .diagnostico-box { 
+            margin-top: 15px; 
+            padding: 12px; 
+            border-radius: 10px; 
+            border: 1px solid #334155;
+            background: rgba(15, 23, 42, 0.5);
+            transition: all 0.3s ease;
+        }
+        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
+        canvas { width: 100% !important; height: 100% !important; }
+
+        /* Estilo botão PDF */
+        #btn-download-pdf {
+            margin-top: 15px; 
+            padding: 10px 15px; 
+            border-radius: 10px; 
+            border: none; 
+            background-color: var(--accent); 
+            color: #fff; 
+            font-weight: bold;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <header style="margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center;">
+        <h1 style="margin: 0; font-size: 24px;">🛡️ GásMar <span style="font-weight: 300; font-size: 16px;">| Monitoramento Industrial</span></h1>
+        <div id="status-chip" class="status-badge status-ok">SISTEMA ONLINE</div>
+    </header>
+
+    <div class="container">
+        <div class="sidebar">
+            <div class="card">
+                <p style="color: #94a3b8; margin: 0;">Sensor Ativo</p>
+                <h3 id="sensor-id" style="margin: 5px 0 20px 0;">Carregando...</h3>
+                
+                <p style="color: #94a3b8; margin: 0;">Nível Atual (PPM)</p>
+                <div class="gas-value" id="gas-level">0</div>
+                
+                <div id="diagnostico-container" class="diagnostico-box">
+                    <p style="margin: 0; font-size: 12px; color: #94a3b8; text-transform: uppercase;">Estado do Ambiente</p>
+                    <div id="status-texto" style="font-size: 18px; font-weight: bold; color: var(--success); margin-top: 5px;">
+                        ✅ Ar Seguro
+                    </div>
+                </div>
+
+                <div id="alerta-msg" style="display: none; color: var(--danger); font-weight: bold; margin-top: 15px; font-size: 14px; text-align: center;">
+                    ⚠️ ATENÇÃO: EVACUE A ÁREA!
+                </div>
+            </div>
+
+            <div class="card" style="flex-grow: 1;">
+                <h4>Configurações</h4>
+                <p style="font-size: 13px; color: #94a3b8;">Limite de Alerta: <strong>500 PPM</strong></p>
+                <p style="font-size: 13px; color: #94a3b8;">IP do Servidor: <strong>localhost:3000</strong></p>
+
+                <!-- Botão para baixar PDF -->
+                <button id="btn-download-pdf">📄 Baixar PDF</button>
+            </div>
+        </div>
+
+        <div class="card">
+            <h4>Histórico de Variação</h4>
+            <div style="position: relative; height: 350px;">
+                <canvas id="gasChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <script src="renderer.js"></script>
+</body>
+</html>
