@@ -143,16 +143,16 @@ require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const mqtt = require('mqtt');
-<<<<<<< HEAD
+//<<<<<<< HEAD
 const sensorRoutes = require('./routes/sensorRoutes'); 
 const SensorModel = require('./models/sensorModel');
-=======
+//=======
 const http = require('http'); // necessário para integrar Socket.io
 const { Server } = require('socket.io');
 
 const sensorRoutes = require('./routes/sensorRoutes'); 
 const SensorModel = require('./models/sensorModel'); // salvar no SQLite
->>>>>>> 3162108821a1eaff72f499145f18bc5f59fb2cae
+//>>>>>>> 3162108821a1eaff72f499145f18bc5f59fb2cae
 
 const app = express();
 app.use(cors());
@@ -168,18 +168,18 @@ console.log("-----------------------------------------");
 console.log("O SERVIDOR ESTÁ RODANDO COM MQTT (MOSQUITTO)!");
 console.log("-----------------------------------------");
 
-<<<<<<< HEAD
+//<<<<<<< HEAD
 // 🔥 NOVO BROKER (SEU NOTEBOOK)
 const brokerUrl = 'mqtt://10.203.36.232';
 
 // 🔥 NOVO TÓPICO (MESMO DO ESP)
 const topic = 'sensor/gas';
 
-=======
+//=======
 // --- CONFIGURAÇÃO MQTT ---
 const brokerUrl = 'mqtt://localhost:1883';
 const topic = 'gasmar/sensor/leitura';
->>>>>>> 3162108821a1eaff72f499145f18bc5f59fb2cae
+//>>>>>>> 3162108821a1eaff72f499145f18bc5f59fb2cae
 const client = mqtt.connect(brokerUrl);
 
 client.on('connect', () => {
@@ -199,7 +199,7 @@ client.on('message', async (topic, message) => {
     console.log("=================================");
 
     try {
-<<<<<<< HEAD
+//<<<<<<< HEAD
         const msg = message.toString();
 
         console.log(`📥 Recebido: ${msg}`);
@@ -219,7 +219,7 @@ client.on('message', async (topic, message) => {
         await SensorModel.salvarLeitura(sensor_id, gas_level, alerta);
 
         console.log(`📡 [MQTT] Salvo: ID ${sensor_id} - Nível: ${gas_level}`);
-=======
+//=======
         const payload = JSON.parse(msgString);
 
         // Validação mínima
@@ -239,17 +239,17 @@ client.on('message', async (topic, message) => {
         // Envia para todos frontends conectados via WebSocket
         io.emit('mqtt-dado', { sensor_id, gas_level, alerta });
 
->>>>>>> 3162108821a1eaff72f499145f18bc5f59fb2cae
+//>>>>>>> 3162108821a1eaff72f499145f18bc5f59fb2cae
     } catch (err) {
         console.error("❌ Erro ao processar JSON:", err.message);
     }
 });
 
-<<<<<<< HEAD
+//<<<<<<< HEAD
 // 🔥 ROTAS
-=======
+//=======
 // Rotas REST
->>>>>>> 3162108821a1eaff72f499145f18bc5f59fb2cae
+//>>>>>>> 3162108821a1eaff72f499145f18bc5f59fb2cae
 app.get('/teste-direto', (req, res) => {
     res.send('Servidor está respondendo!');
 });
@@ -265,13 +265,14 @@ app.use((req, res) => {
 
 // Subindo o servidor HTTP (com Socket.io integrado)
 const PORT = process.env.PORT || 3000;
-<<<<<<< HEAD
+//<<<<<<< HEAD
 
 app.listen(PORT, () => {
     console.log(`🚀 API rodando em http://localhost:${PORT}`);
-=======
+//=======
 server.listen(PORT, () => {
     console.log(`API rodando em http://localhost:${PORT}`);
     console.log(`Teste o histórico em: http://localhost:${PORT}/sensor/historico`);
->>>>>>> 3162108821a1eaff72f499145f18bc5f59fb2cae
+//>>>>>>> 3162108821a1eaff72f499145f18bc5f59fb2cae
 });
+
