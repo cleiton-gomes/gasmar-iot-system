@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard GásMar</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+<style>
+  /* Estilos básicos para status */
+  .status-badge { padding: 5px 10px; border-radius: 5px; color: #fff; }
+  .status-alerta { background-color: red; }
+  .status-ok { background-color: green; }
+  #diagnostico-container { border: 2px solid #334155; padding: 10px; margin-bottom: 20px; }
+  #alerta-msg { display: none; color: red; font-weight: bold; }
+</style>
+</head>
+<body>
+
+<div id="diagnostico-container">
+    <div>ID Sensor: <span id="sensor-id">--</span></div>
+    <div>Nível de Gás: <span id="gas-level">--</span></div>
+    <div id="status-texto">Carregando...</div>
+    <div id="status-chip" class="status-badge status-ok">SISTEMA OFFLINE</div>
+    <div id="alerta-msg">⚠️ Alerta de Gás Ativo!</div>
+</div>
+
+<canvas id="gasChart" height="200"></canvas>
+
+<script>
+const ctx = document.getElementById('gasChart').getContext('2d');
+let gasData = [];
+let labels = [];
+
+// Configuração do gráfico Chart.js
+const chart = new Chart(ctx, {
+    type: 'line',
+    data: {
+        labels: labels,
+        datasets: [{
+            label: 'Nível de Gás',
+            data: gasData,
+            borderColor: '#38bdf8',
+            backgroundColor: 'rgba(56, 189, 248, 0.1)',
+            borderWidth: 3,
+            fill: true,
+            tension: 0.4,
+            pointRadius: 0
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+            y: { beginAtZero: true, grid: { color: '#334155' } },
+            x: { grid: { display: false } }
+        },
+        plugins: { legend: { display: false } }
+    }
+});
+
+// Função para atualizar elementos de status e gráfico
+function atualizarTela(dado) {
+    const { sensor_id, gas_level, alerta } = dado;
+
+    const sensorIdEl = document.getElementById('sensor-id');
+    const gasLevelEl = document.getElementById('gas-level');
+    const statusTexto = document.getElementById('status-texto');
+    const diagContainer = document.getElementById('diagnostico-container');
+    const chip = document.getElementById('status-chip');
+    const msg = document.getElementById('alerta-msg');
+
+    sensorIdEl.innerText = sensor_id;
+    gasLevelEl.innerText = gas_level;
+
+    if (alerta) {
+        chip.className = 'status-badge status-alerta';
+        chip.innerText = '⚠️ ALERTA CRÍTICO';
+        msg.style.display = 'block';
+
+        statusTexto.innerText = "⚠️ VAZAMENTO DE GÁS!";
+        statusTexto.style.color = "var(--danger)";
+        diagContainer.style.borderColor = "var(--danger)";
+        gasLevelEl.style.color = "var(--danger)";
+    } else {
+        chip.className = 'status-badge status-ok';
+        chip.innerText = 'SISTEMA ONLINE';
+        msg.style.display = 'none';
+
+        statusTexto.innerText = "✅ Ar Seguro / Normal";
+        statusTexto.style.color = "var(--success)";
+        diagContainer.style.borderColor = "#334155";
+        gasLevelEl.style.color = "var(--accent)";
+    }
+
+    // Atualiza gráfico
+    const now = new Date().toLocaleTimeString();
+    if (labels.length > 20) { // Mantém apenas os últimos 20 pontos
+        labels.shift();
+        gasData.shift();
+    }
+    labels.push(now);
+    gasData.push(gas_level);
+    chart.update();
+}
+
+// --- 1️⃣ Carrega último estado do banco ao abrir a página ---
+async function carregarUltimoEstado() {
+    try {
+        const response = await fetch('http://localhost:3000/sensor/status');
+        const data = await response.json();
+        atualizarTela(data);
+    } catch (error) {
+        console.error("Falha na conexão com a API GásMar");
+        document.getElementById('status-texto').innerText = "❌ API OFFLINE";
+        document.getElementById('status-texto').style.color = "gray";
+    }
+}
+
+// --- 2️⃣ Conecta WebSocket para dados MQTT em tempo real ---
+const socket = io('http://localhost:3000');
+socket.on('mqtt-dado', (dado) => {
+    atualizarTela(dado);
+});
+
+// Inicializa
+carregarUltimoEstado();
+</script>
+
+</body>
+</html>

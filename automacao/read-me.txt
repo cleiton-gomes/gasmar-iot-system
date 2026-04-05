@@ -1,0 +1,4 @@
+#no cmd
+pip install pyserial
+
+depois no cmd rodar python ponte.py
