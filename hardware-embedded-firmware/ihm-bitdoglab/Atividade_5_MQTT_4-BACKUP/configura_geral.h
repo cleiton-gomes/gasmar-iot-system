@@ -29,7 +29,7 @@
 #define WIFI_SSID "Redmi Note 9"
 #define WIFI_PASS "88888888"
 
-#define MQTT_BROKER_IP "10.152.251.232"
+#define MQTT_BROKER_IP "10.152.251.213"
 #define MQTT_BROKER_PORT 1883
 
 #define TOPICO_PING             "pico/PING"

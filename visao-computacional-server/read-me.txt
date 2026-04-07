@@ -1,0 +1,8 @@
+# ambiente virtual 
+python -m venv venv
+
+#ativando ambiente virtual
+venv\Scripts\activate
+
+#instalando opencv 
+pip install opencv-python numpy

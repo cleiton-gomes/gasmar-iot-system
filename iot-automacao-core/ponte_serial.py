@@ -3,7 +3,7 @@ import time
 
 # --- CONFIGURAÇÃO DAS PORTAS ---
 PORTA_PICO = 'COM16'    
-PORTA_ARDUINO = 'COM13' 
+PORTA_ARDUINO = 'COM17' 
 BAUD_RATE = 115200
 
 try:
