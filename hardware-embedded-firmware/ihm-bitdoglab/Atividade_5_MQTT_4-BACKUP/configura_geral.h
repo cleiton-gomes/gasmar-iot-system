@@ -26,8 +26,8 @@
 #define TEMPO_MENSAGEM 2000
 #define TAM_FILA 16
 
-#define WIFI_SSID "Redmi Note 9"
-#define WIFI_PASS "88888888"
+#define WIFI_SSID "REDE_LOCAL"
+#define WIFI_PASS "@141785Xd"
 
 #define MQTT_BROKER_IP "10.152.251.213"
 #define MQTT_BROKER_PORT 1883

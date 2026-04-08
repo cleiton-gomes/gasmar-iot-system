@@ -22,8 +22,8 @@ static const char *TAG = "MAIN";
    =========================== */
 
 // ⚠️ USE WIFI 2.4GHz (NÃO 5GHz)
-#define WIFI_SSID        "Redmi Note 9"
-#define WIFI_PASS        "88888888"
+#define WIFI_SSID        "REDE_LOCAL"
+#define WIFI_PASS        "@141785Xd"
 
 // IP do seu notebook (onde está o Mosquitto)
 #define MQTT_BROKER_URI  "mqtt://10.203.36.232"

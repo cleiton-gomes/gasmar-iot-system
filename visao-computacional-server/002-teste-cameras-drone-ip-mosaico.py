@@ -4,7 +4,7 @@ import threading
 import time
 
 # URLs das suas fontes
-URL_HILOOK = "rtsp://admin:@senha00@192.168.1.64:554/Streaming/Channels/101"
+URL_HILOOK = "rtsp://admin:@senha00@10.0.0.64:554/Streaming/Channels/101"
 URL_DRONE  = "rtsp://localhost:8554/drone"
 
 class CameraStream:

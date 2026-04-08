@@ -27,6 +27,7 @@ def iniciar_servidor_visao():
 
         # --- AQUI VAI ENTRAR O YOLO NO PRÓXIMO PASSO ---
         # Por enquanto, vamos apenas colocar um título na imagem
+        
         cv2.putText(frame, "GASMAR - DRONE LIVE", (30, 50), 
                     cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
 

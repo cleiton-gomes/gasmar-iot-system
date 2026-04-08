@@ -3,7 +3,7 @@ import cv2
 #usuario: admin
 #senha: @senha00
 #
-RTSP_URL = "rtsp://admin:@senha00@192.168.1.64:554/Streaming/Channels/101"
+RTSP_URL = "rtsp://admin:@senha00@10.0.0.64:554/Streaming/Channels/101"
 
 def iniciar_servidor_visao():
     # CAP_FFMPEG é o driver mais rápido para o seu Windows
